@@ -25,7 +25,18 @@ const ALLOWED_BLOCKS = [ 'sm/page-card' ];
 class smWrapper extends Component {
 	constructor() {
 		super( ...arguments );
+		this.onSelectChange = this.onSelectChange.bind(this);
 	}
+
+	onSelectChange ( value ) {
+
+		this.setState(this.state);
+		// Set the attributes
+		this.props.setAttributes( {
+			maxInRow: value
+		});
+	}
+
 	render() {
 		const {
 			className,
@@ -41,22 +52,20 @@ class smWrapper extends Component {
 			isSelected && 'is-selected'
 		);
 
-		return (
+		return [
 			!! isSelected && (<InspectorControls key='inspector'>
 				<PanelBody title={ 'Options' }>
 					<div className={ 'components-base-control' }>
 						<SelectControl
 					        label="Max items in row on desktop"
-					        value={ parseInt(maxInRow) }
+					        value={ maxInRow }
 					        options={ [
 					            { label: '1', value: '1' },
 					            { label: '2', value: '2' },
 					            { label: '3', value: '3' },
 					            { label: '4', value: '4' },
 					        ] }
-					        onChange={ ( maxInRow ) => {
-					        	setState( { maxInRow } ) }
-					        }
+					        onChange={ this.onSelectChange }
 					    />
                 	</div>
                 </PanelBody>
@@ -64,7 +73,7 @@ class smWrapper extends Component {
 			<div className={ wrapperClassName }>
 				<InnerBlocks allowedBlocks={ ALLOWED_BLOCKS } />
 			</div>
-		);
+		];
 	}
 }
 
@@ -78,8 +87,8 @@ registerBlockType( 'sm/wrapper', {
 	description: __( 'Add a wrapper' ),
 	attributes: {
 		maxInRow: {
-			type: 'number',
-			default: 3,
+			type: 'string',
+			default: '3',
 		}
 	},
 

@@ -69,9 +69,11 @@ class smSection extends Component {
 					<div className={ 'sm-colorpalette-wrapper components-base-control' }>
 						<span className={ 'components-base-control__label' }>Background color</span>
                 		<ColorPalette
-                		className={ 'sm-colorpalette' }
+                			className={ 'sm-colorpalette' }
+                			colors={ smBgColors }
                 			value={ bgColor }
                 			onChange={ this.onBgColorChange }
+                			disableCustomColors={ true }
                 		/>
                 	</div>
                 	<div className={ 'sm-colorpalette-wrapper components-base-control' }>
@@ -81,6 +83,7 @@ class smSection extends Component {
 	                		colors={ smIconColors }
 	                		value={ textColor }
 	                		onChange={ this.onColorChange }
+	                		disableCustomColors={ true }
 	                	/>
 					</div>
                 </PanelBody>
