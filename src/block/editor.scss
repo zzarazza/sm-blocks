@@ -1,0 +1,36 @@
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+
+.wp-block-sm-wrapper  {
+	background: white;
+	border: 1px dotted #333;
+	color: #333;
+	margin: 0 auto;
+	max-width: 740px;
+	padding: 2rem;
+
+	&.is-selected {
+		border: 1px solid $blue;
+		box-shadow: 0 0 5px $blue;
+	}
+
+	.editor-block-list__layout {
+		> .editor-block-list__block {
+			padding-left: 28px;
+			padding-right: 28px;
+
+			> .editor-block-list__block-edit {
+				margin-top: 0;
+			}
+
+			.editor-block-drop-zone {
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+	}
+}
