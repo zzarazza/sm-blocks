@@ -48,6 +48,13 @@
 		box-shadow: 0 0 5px $blue;
 	}
 
+	&.bcolor-primary,
+	&.bcolor-secondary,
+	&.bcolor-dark-gray,
+	&.bcolor-blue {
+		background-color: rgba($black,0.1);
+	}
+
 	.editor-block-list__layout {
 		> .editor-block-list__block {
 			padding-left: 28px;
