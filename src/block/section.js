@@ -16,8 +16,8 @@ const {
 	getColorClassName,
 	getColorObjectByColorValue
 } = wp.editor;
-const { PanelBody } = wp.components;
-const { Component } = wp.element;
+const { PanelBody, BaseControl, ColorIndicator } = wp.components;
+const { Component, Fragment } = wp.element;
 
 
 class smSection extends Component {
@@ -48,45 +48,77 @@ class smSection extends Component {
 			} = {}
 		} = this.props;
 
-		let bgClass, txtClass;
+		const bgObject = getColorObjectByColorValue( smBgColors, bgColor );
+		const bgSlug = bgObject && bgObject.slug;
 
-		if ( bgColor ) {
-			bgClass = getColorObjectByColorValue(smBgColors, bgColor);
-		}
+		const colorObject = getColorObjectByColorValue( smIconColors, textColor );
 
-		txtClass = getColorObjectByColorValue(smIconColors, textColor);
+		const colorSlug = colorObject && colorObject.slug;;
 
 		const sectionClassName = classnames(
 			className,
 			isSelected && 'is-selected',
-			bgClass && `bcolor-${bgClass.slug}`,
-			txtClass && `color-${txtClass.slug}`
+			bgSlug && `bcolor-${bgSlug}`,
+			colorSlug && `color-${colorSlug}`
 		);
+
+		// const label = "Background color";
+
+		// const labelElement = (
+		// 	<Fragment>
+		// 		{ label }
+		// 		{ bgColor && (
+		// 			<ColorIndicator
+		// 				colorValue={ bgColor }
+		// 			/>
+		// 		) }
+		// 	</Fragment>
+		// );
 
 		return [
 			!! isSelected && (<InspectorControls key='inspector'>
-				<PanelBody title={'Colors'}>
-					<div className={ 'sm-colorpalette-wrapper components-base-control' }>
-						<span className={ 'components-base-control__label' }>Background color</span>
-                		<ColorPalette
-                			className={ 'sm-colorpalette' }
-                			colors={ smBgColors }
-                			value={ bgColor }
-                			onChange={ this.onBgColorChange }
-                			disableCustomColors={ true }
-                		/>
-                	</div>
-                	<div className={ 'sm-colorpalette-wrapper components-base-control' }>
-						<span className={ 'components-base-control__label' }>Text color</span>
+				<PanelBody title={'Colors'} className={'editor-panel-color-settings'}>
+					<BaseControl
+						className="sm-colorpalette-wrapper editor-color-palette-control"
+						label={
+							<Fragment>
+								{ "Background color" }
+								{ bgColor && (
+									<ColorIndicator
+										colorValue={ bgColor }
+									/>
+								) }
+							</Fragment>
+						}>
 						<ColorPalette
-	                		className={ 'sm-colorpalette' }
-	                		colors={ smIconColors }
-	                		value={ textColor }
-	                		onChange={ this.onColorChange }
-	                		disableCustomColors={ true }
-	                	/>
-					</div>
-                </PanelBody>
+							className="sm-colorpalette editor-color-palette-control__color-palette"
+							colors={ smBgColors }
+							value={ bgColor }
+							onChange={ this.onBgColorChange }
+							disableCustomColors={ true }
+						/>
+					</BaseControl>
+					<BaseControl
+						className="sm-colorpalette-wrapper editor-color-palette-control"
+						label={
+							<Fragment>
+								{ "Text color" }
+								{ textColor && (
+									<ColorIndicator
+										colorValue={ textColor }
+									/>
+								) }
+							</Fragment>
+						}>
+						<ColorPalette
+							className="sm-colorpalette editor-color-palette-control__color-palette"
+							colors={ smIconColors }
+							value={ textColor }
+							onChange={ this.onColorChange }
+							disableCustomColors={ true }
+						/>
+					</BaseControl>
+				</PanelBody>
 			</InspectorControls> ),
 			<section className={ sectionClassName }>
 				<InnerBlocks />
