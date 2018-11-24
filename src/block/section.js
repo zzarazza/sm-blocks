@@ -13,7 +13,6 @@ const {
 	InnerBlocks,
 	InspectorControls,
 	ColorPalette,
-	getColorClassName,
 	getColorObjectByColorValue
 } = wp.editor;
 const { PanelBody, BaseControl, ColorIndicator } = wp.components;
@@ -52,8 +51,7 @@ class smSection extends Component {
 		const bgSlug = bgObject && bgObject.slug;
 
 		const colorObject = getColorObjectByColorValue( smIconColors, textColor );
-
-		const colorSlug = colorObject && colorObject.slug;;
+		const colorSlug = colorObject && colorObject.slug;
 
 		const sectionClassName = classnames(
 			className,
@@ -61,19 +59,6 @@ class smSection extends Component {
 			bgSlug && `bcolor-${bgSlug}`,
 			colorSlug && `color-${colorSlug}`
 		);
-
-		// const label = "Background color";
-
-		// const labelElement = (
-		// 	<Fragment>
-		// 		{ label }
-		// 		{ bgColor && (
-		// 			<ColorIndicator
-		// 				colorValue={ bgColor }
-		// 			/>
-		// 		) }
-		// 	</Fragment>
-		// );
 
 		return [
 			!! isSelected && (<InspectorControls key='inspector'>
@@ -161,18 +146,16 @@ registerBlockType( 'sm/section', {
 			} = {}
 		} = props;
 
-		let bgClass, txtClass;
+		const bgObject = getColorObjectByColorValue( smBgColors, bgColor );
+		const bgSlug = bgObject && bgObject.slug;
 
-		if ( bgColor ) {
-			bgClass = getColorObjectByColorValue(smBgColors, bgColor);
-		}
-
-		txtClass = getColorObjectByColorValue(smIconColors, textColor);
+		const colorObject = getColorObjectByColorValue( smIconColors, textColor );
+		const colorSlug = colorObject && colorObject.slug;
 
 		const sectionClassName = classnames(
-									className,
-									bgClass && `bcolor-${bgClass.slug}`,
-									txtClass && `color-${txtClass.slug}`
+			className,
+			bgSlug && `bcolor-${bgSlug}`,
+			colorSlug && `color-${colorSlug}`
 		);
 
 		return (
