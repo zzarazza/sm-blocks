@@ -55,15 +55,18 @@ class smSelectedPage extends Component {
 	* Loading Posts
 	*/
 	getOptions() {
-		return ( new wp.api.collections.Pages() ).fetch( { data: { per_page: 25 } } ).then( ( posts ) => {
-			if( posts && 0 !== this.state.selectedPost ) {
-				// If we have a selected Post, find that post and add it.
-				const post = posts.find( ( item ) => { return item.id == this.state.selectedPost } );
-				// This is the same as { post: post, posts: posts }
-				this.setState( { post, posts } );
-			} else {
-				this.setState( { posts } );
-			}
+		const that = this;
+
+		wp.api.loadPromise.done( function() { ( new wp.api.collections.Pages() ).fetch( { data: { per_page: 25 } } ).then( ( posts ) => {
+				if( posts && 0 !== that.state.selectedPost ) {
+					// If we have a selected Post, find that post and add it.
+					const post = posts.find( ( item ) => { return item.id == that.state.selectedPost } );
+					// This is the same as { post: post, posts: posts }
+					that.setState({ post, posts });
+				} else {
+					that.setState({ posts });
+				}
+			});
 		});
 	}
 
