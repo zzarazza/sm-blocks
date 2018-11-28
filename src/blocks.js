@@ -9,5 +9,13 @@
  * Webpack is compiling as the input file.
  */
 
+ //  Import CSS.
+import './block/style.scss';
+import './block/editor.scss';
+
+import './block/document.js';
 import './block/wrapper.js';
 import './block/section.js';
+import './block/list.js';
+import './block/item.js';
+import './block/page.js';

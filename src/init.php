@@ -53,7 +53,19 @@ function sm_blocks_editor_assets() {
 	wp_enqueue_script(
 		'sm_blocks-js', // Handle.
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
-		array( 'wp-blocks', 'wp-i18n', 'wp-element' ), // Dependencies, defined above.
+		array(
+			'sm_theme_colors',
+			'wp-blocks',
+			'wp-i18n',
+			'wp-element',
+			'wp-editor',
+			'wp-components',
+			'wp-compose',
+			'wp-data',
+			'wp-edit-post',
+			'wp-plugins',
+			'wp-api'
+		), // Dependencies, defined above.
 		// filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: filemtime — Gets file modification time.
 		true // Enqueue the script in the footer.
 	);
