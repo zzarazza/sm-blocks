@@ -147,12 +147,44 @@
     }
 }
 
+@keyframes loading {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
 // Page Card
 .wp-block-sm-page-card  {
 	box-shadow: 3px 3px 10px rgba(black,0.1), 0 0 1px rgba(black,0.1);
 
 	&.is-selected {
 		box-shadow: 0 0 5px $blue, 0 0 1px $blue;
+	}
+
+	.loading-choose {
+		position: relative;
+
+		&:before,
+		&:after {
+			position: absolute;
+			content: "";
+			height: 3px;
+			background-color: rgba($green,0.5);
+			bottom: 0;
+			left: 0;
+		}
+
+		&:before {
+			width: 100%;
+		}
+
+		&:after {
+			animation: 3s infinite loading;
+		}
 	}
 
 	.loading-choose,
@@ -249,5 +281,37 @@
 				background-position: -52px*(index($sm-icons, $i) - 1) 0;
 			}
 		}
+	}
+}
+
+.wp-block-columns {
+	position: relative;
+
+	&.has-2-columns:before {
+		position: absolute;
+		content: "";
+		top: 0;
+		bottom: 0;
+		width: 0;
+		border-right: 1px dotted rgba($black,0.3);
+		left: 50%;
+	}
+
+	&.has-3-columns:before,
+	&.has-3-columns:after {
+		position: absolute;
+		content: "";
+		top: 0;
+		bottom: 0;
+		width: 0;
+		border-right: 1px dotted rgba($black,0.3);
+	}
+
+	&.has-3-columns:before {
+		left: 33.333%;
+	}
+
+	&.has-3-columns:after {
+		right: 33.333%;
 	}
 }

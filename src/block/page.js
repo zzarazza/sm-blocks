@@ -57,7 +57,7 @@ class smSelectedPage extends Component {
 	getOptions() {
 		const that = this;
 
-		wp.api.loadPromise.done( function() { ( new wp.api.collections.Pages() ).fetch( { data: { per_page: 25 } } ).then( ( posts ) => {
+		return wp.api.loadPromise.done( function() { ( new wp.api.collections.Pages() ).fetch( { data: { per_page: 25 } } ).then( ( posts ) => {
 				if( posts && 0 !== that.state.selectedPost ) {
 					// If we have a selected Post, find that post and add it.
 					const post = posts.find( ( item ) => { return item.id == that.state.selectedPost } );
@@ -73,17 +73,24 @@ class smSelectedPage extends Component {
 	onSelectPostChange ( value ) {
 		// Find the post
 		const post = this.state.posts.find( ( item ) => { return item.id == parseInt( value ) } );
-		// Set the state
 		this.state.selectedPost = parseInt(value);
-		this.state.post = post;
-		this.setState(this.state);
-		// Set the attributes
-		this.props.setAttributes( {
-			selectedPost: parseInt( value ),
-			title: post.title.rendered,
-			content: post.excerpt.rendered,
-			link: post.link,
-		});
+
+		if (post) {
+			// Set the state
+			this.state.post = post;
+			this.setState(this.state);
+			// Set the attributes
+			this.props.setAttributes( {
+				selectedPost: parseInt( value ),
+				title: post.title.rendered,
+				content: post.excerpt.rendered,
+				link: post.link,
+			});
+		} else {
+			this.props.setAttributes( {
+				selectedPost: parseInt( value )
+			});
+		}
 	}
 
 	onTitleChange( value ) {
@@ -122,8 +129,6 @@ class smSelectedPage extends Component {
 		let options = [ { value: 0, label: __( 'Select a Page' ) } ];
 		let output  = __( 'Loading Pages...' );
 
-		this.props.className += ' loading';
-
 		if( this.state.posts.length > 0 ) {
 			const loading = __( 'Please choose one of %d pages.' );
 			output = <p className="loading-choose" dangerouslySetInnerHTML={{ __html: loading.replace( '%d', this.state.posts.length ) }}></p>;
@@ -155,7 +160,7 @@ class smSelectedPage extends Component {
 		const iconClass = bgSlug && `icon icon-${icon}${color} icon-bcolor-${bgSlug}`;
 
 		// Checking if we have anything in the object
-		if ( this.state.post.hasOwnProperty('title') ) {
+		if ( 0 !== this.state.selectedPost && this.state.post && this.state.post.hasOwnProperty('title') ) {
 			let finalTitle = shortTitle || this.state.post.title.rendered;
 
 			output = <div className={{ classNameInner }} style={{ backgroundColor: blockBgColor }}>
@@ -163,6 +168,11 @@ class smSelectedPage extends Component {
 			 			<h3 className="page-block-title" dangerouslySetInnerHTML={{ __html: finalTitle }}></h3>
 			 			<div className="page-block-excerpt" dangerouslySetInnerHTML={{ __html: this.state.post.excerpt.rendered }}></div>
 			 		</div>;
+		} else {
+			if( this.state.posts.length > 0 ) {
+				const loading = __( 'Please choose one of %d pages.' );
+				output = <p className="loading-choose" dangerouslySetInnerHTML={{ __html: loading.replace( '%d', this.state.posts.length ) }}></p>;
+			}
 		}
 
 		return [
