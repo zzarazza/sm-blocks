@@ -81,3 +81,110 @@ function sm_blocks_editor_assets() {
 
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'sm_blocks_editor_assets' );
+
+function sm_render_block_recent_items( $attributes, $content ) {
+    $recent_posts = wp_get_recent_posts( array(
+        'numberposts' => $attributes['postsToShow'],
+        'post_status' => 'publish',
+    ) );
+    if ( count( $recent_posts ) === 0 ) {
+        return 'No posts';
+    }
+
+    $t = '';
+	$list_items_markup = '';
+
+	foreach ( $recent_posts as $post ) {
+		$post_id = $post['ID'];
+
+		$title = get_the_title( $post_id );
+		if ( ! $title ) {
+			$title = __( '(Untitled)' );
+		}
+		$list_items_markup .= sprintf(
+			'<li><a href="%1$s">%2$s</a>',
+			esc_url( get_permalink( $post_id ) ),
+			esc_html( $title )
+		);
+
+		if ( isset( $attributes['displayPostDate'] ) && $attributes['displayPostDate'] ) {
+			$list_items_markup .= sprintf(
+				'<time datetime="%1$s" class="wp-block-latest-posts__post-date">%2$s</time>',
+				esc_attr( get_the_date( 'c', $post_id ) ),
+				esc_html( get_the_date( '', $post_id ) )
+			);
+		}
+
+		$list_items_markup .= "</li>\n";
+	}
+
+	$class = 'wp-block-recent-items';
+	if ( isset( $attributes['align'] ) ) {
+		$class .= ' align' . $attributes['align'];
+	}
+
+	if ( isset( $attributes['postLayout'] ) && 'grid' === $attributes['postLayout'] ) {
+		$class .= ' is-grid';
+	}
+
+	if ( isset( $attributes['columns'] ) && 'grid' === $attributes['postLayout'] ) {
+		$class .= ' columns-' . $attributes['columns'];
+	}
+
+	if ( isset( $attributes['displayPostDate'] ) && $attributes['displayPostDate'] ) {
+		$class .= ' has-dates';
+	}
+
+	if ( isset( $attributes['className'] ) ) {
+		$class .= ' ' . $attributes['className'];
+	}
+
+	if ( isset( $attributes['title'] ) ) {
+		$t .= ' ' . $attributes['title'];
+	}
+
+	$block_content = sprintf(
+		'<h3>%3$s</h3><ul class="%1$s">%2$s</ul>',
+		esc_attr( $class ),
+		$list_items_markup,
+		$t
+	);
+
+	return $block_content;
+    // return sprintf(
+    //     '<a class="wp-block-my-plugin-latest-post" href="%1$s">%2$s</a>',
+    //     esc_url( get_permalink( $post_id ) ),
+    //     esc_html( get_the_title( $post_id ) )
+    // );
+}
+
+register_block_type( 'sm/recent-items',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			),
+			'postsToShow' => array(
+				'type'    => 'number',
+				'default' => 5,
+			),
+			'displayPostDate' => array(
+				'type'    => 'boolean',
+				'default' => false,
+			),
+			'order'       => array(
+				'type'    => 'string',
+				'default' => 'desc',
+			),
+			'orderBy'     => array(
+				'type'    => 'string',
+				'default' => 'date',
+			),
+			'title'       => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+		),
+    	'render_callback' => 'sm_render_block_recent_items',
+	)
+);
