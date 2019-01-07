@@ -357,3 +357,28 @@
 		}
 	}
 } // .wp-block-recent-posts
+
+.wp-block-team-management {
+	.team-member + .team-member {
+		margin-top: 3rem;
+	}
+
+	.team-member {
+		.t-m-image {
+			img {
+				width: 100px;
+				height: 100px;
+				display: block;
+			}
+		}
+
+		.t-m-name {
+			margin-bottom: 0;
+		}
+
+		.t-m-position {
+			margin-top: 5px;
+			font-size: 1em;
+		}
+	}
+}
