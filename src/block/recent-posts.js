@@ -1,5 +1,5 @@
 /**
- * BLOCK: SM Recent Items
+ * BLOCK: SM Recent Posts
  *
  */
 import classnames from 'classnames';
@@ -7,26 +7,17 @@ import classnames from 'classnames';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 
-const { withSelect } = wp.data;
-const { withState } = wp.compose;
-
 const {
 	InspectorControls,
-	PlainText,
-	ColorPalette,
-	getColorObjectByColorValue
+	PlainText
 } = wp.editor;
+
 const {
 	RangeControl,
 	PanelBody,
-	RadioControl,
 	BaseControl,
-	ColorIndicator,
-	ServerSideRender,
-	Spinner
+	ServerSideRender
 } = wp.components;
-
-const { Component, Fragment } = wp.element;
 
 registerBlockType( 'sm/recent-posts', {
     title: __( 'SM Recent Posts' ),
@@ -90,7 +81,7 @@ registerBlockType( 'sm/recent-posts', {
 	},
 
     save( { attributes } ) {
-    	const { title } = attributes;
+    	const { title, postsToShow } = attributes;
 
         // Rendering in PHP
         return null;
