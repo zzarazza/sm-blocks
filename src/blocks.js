@@ -20,4 +20,5 @@ import './block/list.js';
 import './block/item.js';
 import './block/page.js';
 
-import './block/recent.js';
+import './block/recent-posts.js';
+import './block/recent-news.js';

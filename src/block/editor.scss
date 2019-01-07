@@ -217,14 +217,6 @@
 }
 
 .components-panel {
-	.text-field {
-		.editor-plain-text {
-			border: 1px solid #8d96a0;
-			padding: 6px 8px;
-			font-size: 13px;
-		}
-	}
-
 	.custom-control-label {
 		display: block;
 		margin-bottom: 4px;
@@ -232,6 +224,16 @@
 
 	.components-color-palette {
 		margin-top: 0.6em;
+	}
+}
+
+.components-base-control {
+	.components-base-control__field {
+		.editor-plain-text {
+			border: 1px solid #8d96a0;
+			padding: 6px 8px;
+			font-size: 13px;
+		}
 	}
 }
 
@@ -315,3 +317,43 @@
 		right: 33.333%;
 	}
 }
+
+.wp-block-recent-posts,
+.wp-block-recent-news {
+	h2 {
+		text-transform: uppercase;
+	}
+
+	.wp-block-recent-posts-item {
+		+ .wp-block-recent-posts-item {
+			border-top: 1px dotted #ccc;
+			margin-top: 1em;
+		}
+
+		.entry-header {
+			margin-bottom: 1em;
+
+			.entry-title {
+				margin-bottom: 0;
+			}
+		}
+
+		.blog-content {
+			@media screen and (min-width: 768px) {
+				display: grid;
+				grid-column-gap: 28px;
+				grid-template-columns: 100px 1fr;
+			}
+
+			.post-thumbnail {
+				max-width: 100px;
+			}
+		}
+
+		.entry-content {
+			p:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+} // .wp-block-recent-posts

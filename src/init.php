@@ -82,10 +82,11 @@ function sm_blocks_editor_assets() {
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'sm_blocks_editor_assets' );
 
-function sm_render_block_recent_items( $attributes, $content ) {
+function sm_render_block_recent_posts( $attributes, $content ) {
     $recent_posts = wp_get_recent_posts( array(
         'numberposts' => $attributes['postsToShow'],
         'post_status' => 'publish',
+        'post_type'   => 'post'
     ) );
     if ( count( $recent_posts ) === 0 ) {
         return 'No posts';
@@ -101,39 +102,137 @@ function sm_render_block_recent_items( $attributes, $content ) {
 		if ( ! $title ) {
 			$title = __( '(Untitled)' );
 		}
-		$list_items_markup .= sprintf(
-			'<li><a href="%1$s">%2$s</a>',
-			esc_url( get_permalink( $post_id ) ),
-			esc_html( $title )
+
+		$text = get_the_excerpt( $post_id );
+
+		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-blog-thumb' );
+		if ('' == $thumbnail ) :
+			$thumbnail = '<img src="' . get_template_directory_uri() . '/assets/images/default-blog-thumbnail.png" width="217" height="203" alt="' . $title . '">';
+		endif;
+
+		$author = sprintf(
+			/* translators: %s: post author */
+			__( 'by %s', 'systemorph' ),
+			'<span class="author">' . get_the_author_meta( 'display_name', $post['post_author'] ) . '</span> '
 		);
 
-		if ( isset( $attributes['displayPostDate'] ) && $attributes['displayPostDate'] ) {
-			$list_items_markup .= sprintf(
-				'<time datetime="%1$s" class="wp-block-latest-posts__post-date">%2$s</time>',
-				esc_attr( get_the_date( 'c', $post_id ) ),
-				esc_html( get_the_date( '', $post_id ) )
-			);
+		$list_items_markup .= sprintf(
+			'<article class="wp-block-recent-posts-item">
+				<header class="entry-header">
+					<h3 class="entry-title"><a href="%1$s">%2$s</a></h3>
+					<div class="entry-meta"><span class="posted-on"><span class="screen-reader-text">Posted on</span> <time datetime="%3$s" class="wp-block-recent-posts__post-date">%4$s</time></span> - <span class="byline">%5$s</span></div>
+				</header>
+				<div class="blog-content"><div class="post-thumbnail"><a href="%1$s">%6$s</a></div><div class="entry-content"><p>%7$s</p></div></div></article>',
+			esc_url( get_permalink( $post_id ) ),
+			esc_html( $title ),
+			get_the_date( DATE_W3C, $post_id ),
+			get_the_date("d M Y", $post_id),
+			$author,
+			$thumbnail,
+			$text
+		);
+
+		$list_items_markup .= "\n";
+	}
+
+	$class = 'wp-block-recent-posts';
+
+	if ( isset( $attributes['className'] ) ) {
+		$class .= ' ' . $attributes['className'];
+	}
+
+	if ( isset( $attributes['title']) && $attributes['title'] !== '' ) {
+		$t .= '<h2>' . $attributes['title'] . '</h2>';
+	}
+
+	$l = '<a class="back-to-blog-link" href="' . get_post_type_archive_link( 'post' ) . '">View all blog posts</a>';
+
+	$block_content = sprintf(
+		'<div class="%1$s">%3$s %2$s <div class="wp-block-recent-posts-view-all">%4$s</div></div>',
+		esc_attr( $class ),
+		$list_items_markup,
+		$t,
+		$l
+	);
+
+	return $block_content;
+}
+
+register_block_type( 'sm/recent-posts',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			),
+			'postsToShow' => array(
+				'type'    => 'number',
+				'default' => 2,
+			),
+			'title'       => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+		),
+    	'render_callback' => 'sm_render_block_recent_posts',
+	)
+);
+
+function sm_render_block_recent_news( $attributes, $content ) {
+    $recent_posts = wp_get_recent_posts( array(
+        'numberposts' => $attributes['postsToShow'],
+        'post_status' => 'publish',
+        'post_type'   => 'news'
+    ) );
+    if ( count( $recent_posts ) === 0 ) {
+        return 'No news';
+    }
+
+    $t = '';
+	$list_items_markup = '';
+
+	foreach ( $recent_posts as $post ) {
+		$post_id = $post['ID'];
+
+		$title = get_the_title( $post_id );
+		if ( ! $title ) {
+			$title = __( '(Untitled)' );
 		}
 
-		$list_items_markup .= "</li>\n";
+		$text = get_the_excerpt( $post_id );
+		if ( ! $text ) {
+			$text = '';
+		}
+
+		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-news-thumb' );
+		if ('' == $thumbnail ) :
+			$thumbnail = '<img src="' . get_template_directory_uri() . '/assets/images/default-news-thumbnail.png" width="70" height="70" alt="' . $title . '">';
+		endif;
+
+		$author = sprintf(
+			/* translators: %s: post author */
+			__( 'by %s', 'systemorph' ),
+			'<span class="author">' . get_the_author_meta( 'display_name', $post['post_author'] ) . '</span> '
+		);
+
+		$list_items_markup .= sprintf(
+			'<article class="wp-block-recent-posts-item">
+				<header class="entry-header">
+					<h3 class="entry-title"><a href="%1$s">%2$s</a></h3>
+					<div class="entry-meta"><span class="posted-on"><span class="screen-reader-text">Posted on</span> <time datetime="%3$s" class="wp-block-recent-posts__post-date">%4$s</time></span> - <span class="byline">%5$s</span></div>
+				</header>
+				<div class="blog-content"><div class="entry-content"><p>%6$s</p></div></div></article>',
+			esc_url( get_permalink( $post_id ) ),
+			esc_html( $title ),
+			get_the_date( DATE_W3C, $post_id ),
+			get_the_date("d M Y", $post_id),
+			$author,
+			$text
+		);
+
+		$list_items_markup .= "\n";
 	}
 
-	$class = 'wp-block-recent-items';
-	if ( isset( $attributes['align'] ) ) {
-		$class .= ' align' . $attributes['align'];
-	}
-
-	if ( isset( $attributes['postLayout'] ) && 'grid' === $attributes['postLayout'] ) {
-		$class .= ' is-grid';
-	}
-
-	if ( isset( $attributes['columns'] ) && 'grid' === $attributes['postLayout'] ) {
-		$class .= ' columns-' . $attributes['columns'];
-	}
-
-	if ( isset( $attributes['displayPostDate'] ) && $attributes['displayPostDate'] ) {
-		$class .= ' has-dates';
-	}
+	$class = 'wp-block-recent-news';
 
 	if ( isset( $attributes['className'] ) ) {
 		$class .= ' ' . $attributes['className'];
@@ -143,22 +242,20 @@ function sm_render_block_recent_items( $attributes, $content ) {
 		$t .= ' ' . $attributes['title'];
 	}
 
+	$l = '<a class="back-to-blog-link" href="' . get_post_type_archive_link( 'news' ) . '">View all News</a>';
+
 	$block_content = sprintf(
-		'<h3>%3$s</h3><ul class="%1$s">%2$s</ul>',
+		'<div class="%1$s"><h2>%3$s</h2> %2$s <div class="wp-block-recent-news-view-all">%4$s</div></div>',
 		esc_attr( $class ),
 		$list_items_markup,
-		$t
+		$t,
+		$l
 	);
 
 	return $block_content;
-    // return sprintf(
-    //     '<a class="wp-block-my-plugin-latest-post" href="%1$s">%2$s</a>',
-    //     esc_url( get_permalink( $post_id ) ),
-    //     esc_html( get_the_title( $post_id ) )
-    // );
 }
 
-register_block_type( 'sm/recent-items',
+register_block_type( 'sm/recent-news',
 	array(
 		'attributes'      => array(
 			'className'   => array(
@@ -166,25 +263,13 @@ register_block_type( 'sm/recent-items',
 			),
 			'postsToShow' => array(
 				'type'    => 'number',
-				'default' => 5,
-			),
-			'displayPostDate' => array(
-				'type'    => 'boolean',
-				'default' => false,
-			),
-			'order'       => array(
-				'type'    => 'string',
-				'default' => 'desc',
-			),
-			'orderBy'     => array(
-				'type'    => 'string',
-				'default' => 'date',
+				'default' => 2,
 			),
 			'title'       => array(
 				'type'    => 'string',
 				'default' => '',
 			),
 		),
-    	'render_callback' => 'sm_render_block_recent_items',
+    	'render_callback' => 'sm_render_block_recent_news',
 	)
 );
