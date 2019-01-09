@@ -98,6 +98,7 @@ function sm_render_block_recent_posts( $attributes, $content ) {
 
 	foreach ( $recent_posts as $post ) {
 		$post_id = $post['ID'];
+		// var_dump($post);
 
 		$title = get_the_title( $post_id );
 		if ( ! $title ) {
@@ -105,6 +106,7 @@ function sm_render_block_recent_posts( $attributes, $content ) {
 		}
 
 		$text = get_the_excerpt( $post_id );
+		$text = $post['post_excerpt'];
 
 		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-blog-thumb' );
 		if ('' == $thumbnail ) :
@@ -200,7 +202,7 @@ function sm_render_block_recent_news( $attributes, $content ) {
 			$title = __( '(Untitled)' );
 		}
 
-		$text = get_the_excerpt( $post_id );
+		$text = $post['post_excerpt'];;
 		if ( ! $text ) {
 			$text = '';
 		}
