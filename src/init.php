@@ -82,6 +82,7 @@ function sm_blocks_editor_assets() {
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'sm_blocks_editor_assets' );
 
+// =======================================================================
 // Recent Posts Widget
 function sm_render_block_recent_posts( $attributes, $content ) {
     $recent_posts = wp_get_recent_posts( array(
@@ -105,7 +106,6 @@ function sm_render_block_recent_posts( $attributes, $content ) {
 			$title = __( '(Untitled)' );
 		}
 
-		$text = get_the_excerpt( $post_id );
 		$text = $post['post_excerpt'];
 
 		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-blog-thumb' );
@@ -202,7 +202,8 @@ function sm_render_block_recent_news( $attributes, $content ) {
 			$title = __( '(Untitled)' );
 		}
 
-		$text = $post['post_excerpt'];;
+		$text = $post['post_excerpt'];
+
 		if ( ! $text ) {
 			$text = '';
 		}
@@ -278,7 +279,96 @@ register_block_type( 'sm/recent-news',
 	)
 );
 
+// Recent Events Widget
+function sm_render_block_recent_events( $attributes, $content ) {
+    $recent_posts = wp_get_recent_posts( array(
+        'numberposts' => $attributes['postsToShow'],
+        'post_status' => 'publish',
+        'post_type'   => 'event'
+    ) );
+    if ( count( $recent_posts ) === 0 ) {
+        return 'No events';
+    }
 
+	$list_items_markup = '';
+
+	foreach ( $recent_posts as $post ) {
+		$post_id = $post['ID'];
+
+		$title = get_the_title( $post_id );
+		if ( ! $title ) {
+			$title = __( '(Untitled)' );
+		}
+
+		$text = "";
+
+		if ( has_excerpt( $post_id ) ) {
+			$text = get_the_excerpt( $post_id );
+		} else {
+			$text = apply_filters('get_the_excerpt', $post['post_content'] );
+		}
+
+		$list_items_markup .= sprintf(
+			'<article class="wp-block-recent-events-item">
+				<header class="entry-header">
+					<h3 class="entry-title"><a href="%1$s">%2$s</a></h3>
+					<div class="entry-meta"><span class="posted-on"><span class="screen-reader-text">Event date</span> %3$s</span>, <span class="location">%4$s</span></div>
+				</header>
+				<div class="blog-content"><div class="entry-content"><p>%5$s</p></div></div></article>',
+			esc_url( get_permalink( $post_id ) ),
+			esc_html( $title ),
+			the_systemorph_event_dates( $post_id ),
+			the_systemorph_event_location( $post_id ),
+			$text
+		);
+
+		$list_items_markup .= "\n";
+	}
+
+	$t = "";
+	$class = 'wp-block-recent-events';
+
+	if ( isset( $attributes['className'] ) ) {
+		$class .= ' ' . $attributes['className'];
+	}
+
+	if ( isset( $attributes['title'] ) ) {
+		$t .= ' ' . $attributes['title'];
+	}
+
+	$l = '<a class="back-to-events-page" href="' . get_post_type_archive_link( 'event' ) . '">View all events</a>';
+
+	$block_content = sprintf(
+		'<div class="%1$s"><h2>%3$s</h2> %2$s <div class="wp-block-upcoming-events-view-all">%4$s</div></div>',
+		esc_attr( $class ),
+		$list_items_markup,
+		$t,
+		$l
+	);
+
+	return $block_content;
+}
+
+register_block_type( 'sm/recent-events',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			),
+			'postsToShow' => array(
+				'type'    => 'number',
+				'default' => 2,
+			),
+			'title'       => array(
+				'type'    => 'string',
+				'default' => '',
+			),
+		),
+    	'render_callback' => 'sm_render_block_recent_events',
+	)
+);
+
+// =======================================================================
 // Team Widget
 function sm_render_block_team( $attributes, $content ) {
     $team = wp_get_recent_posts( array(
