@@ -99,14 +99,19 @@ function sm_render_block_recent_posts( $attributes, $content ) {
 
 	foreach ( $recent_posts as $post ) {
 		$post_id = $post['ID'];
-		// var_dump($post);
 
 		$title = get_the_title( $post_id );
 		if ( ! $title ) {
 			$title = __( '(Untitled)' );
 		}
 
-		$text = $post['post_excerpt'];
+		$text = "";
+
+		if ( has_excerpt( $post_id ) ) {
+			$text = get_the_excerpt( $post_id );
+		} else {
+			$text = apply_filters('get_the_excerpt', $post['post_content'] );
+		}
 
 		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-blog-thumb' );
 		if ('' == $thumbnail ) :
@@ -202,10 +207,12 @@ function sm_render_block_recent_news( $attributes, $content ) {
 			$title = __( '(Untitled)' );
 		}
 
-		$text = $post['post_excerpt'];
+		$text = "";
 
-		if ( ! $text ) {
-			$text = '';
+		if ( has_excerpt( $post_id ) ) {
+			$text = get_the_excerpt( $post_id );
+		} else {
+			$text = apply_filters('get_the_excerpt', $post['post_content'] );
 		}
 
 		$thumbnail = get_the_post_thumbnail( $post_id, 'systemorph-news-thumb' );
