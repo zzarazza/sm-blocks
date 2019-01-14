@@ -82,6 +82,39 @@ function sm_blocks_editor_assets() {
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'sm_blocks_editor_assets' );
 
+add_action( 'init', function() {
+	register_post_meta( 'page', 'sm_page_icon', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+	register_post_meta( 'page', 'sm_page_icon_bcolor', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+	register_post_meta( 'page', 'sm_page_icon_color', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+	register_post_meta( 'post', 'sm_page_icon', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+	register_post_meta( 'post', 'sm_page_icon_bcolor', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+	register_post_meta( 'post', 'sm_page_icon_color', array(
+		'type' => 'string',
+		'show_in_rest' => true,
+		'single' => true,
+	) );
+});
+
 // =======================================================================
 // Recent Posts Widget
 function sm_render_block_recent_posts( $attributes, $content ) {

@@ -358,6 +358,16 @@
 	}
 } // .wp-block-recent-posts
 
+.wp-block-recent-news {
+	.wp-block-recent-posts-item {
+		.blog-content {
+			@media screen and (min-width: 768px) {
+				display: block;
+			}
+		}
+	}
+}
+
 .wp-block-team-management {
 	.team-member + .team-member {
 		margin-top: 3rem;

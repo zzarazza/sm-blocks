@@ -51,7 +51,7 @@ const reviseData = (oldData, newData) => Object
 		};
 	}, {});
 
-function smDocumentOptions({ meta, oldMeta, onUpdateIcon, onUpdateIconBColor, onUpdateIconColor }) {
+function smDocumentOptions( { meta, oldMeta, onUpdateIcon, onUpdateIconBColor, onUpdateIconColor } ) {
   return (
   	<Fragment>
 		<PluginSidebarMoreMenuItem target="sm-document-options-sidebar">
@@ -61,7 +61,7 @@ function smDocumentOptions({ meta, oldMeta, onUpdateIcon, onUpdateIconBColor, on
 			name="sm-document-options-sidebar"
 			title="Page options"
 		>
-			<PanelBody title={'Colors'} className={'editor-panel-color-settings'}>
+			<PanelBody title={ 'Colors' } className={ 'editor-panel-color-settings' }>
 				<BaseControl
 					className="sm-colorpalette-wrapper editor-color-palette-control"
 					label={
