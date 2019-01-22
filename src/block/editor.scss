@@ -392,3 +392,38 @@
 		}
 	}
 }
+
+.is-style-spacing-medium,
+.is-style-spacing-large {
+	position: relative;
+
+	&:after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+}
+
+
+.is-style-spacing-medium {
+	$s : 7px;
+	margin-bottom: (2 * $s);
+
+	&:after {
+		border-bottom: $s dotted $light-blue;
+		bottom: -$s;
+	}
+}
+
+
+.is-style-spacing-large {
+	$s : 14px;
+	margin-bottom: (2 * $s);
+
+	&:after {
+		border-bottom: $s dashed $light-blue;
+		bottom: -$s;
+	}
+}

@@ -25,3 +25,5 @@ import './block/recent-news.js';
 import './block/recent-events.js';
 
 import './block/team.js';
+
+import './block/styles.js';

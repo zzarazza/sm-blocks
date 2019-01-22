@@ -5,14 +5,24 @@
 import classnames from 'classnames';
 
 const { __ } = wp.i18n;
+
 const { registerBlockType } = wp.blocks;
+
 const {
 	InnerBlocks,
 	InspectorControls,
+	BlockControls,
 	ColorPalette,
 	getColorObjectByColorValue
 } = wp.editor;
-const { PanelBody, BaseControl, ColorIndicator } = wp.components;
+
+const {
+	PanelBody,
+	ToggleControl,
+	BaseControl,
+	ColorIndicator
+} = wp.components;
+
 const { Component, Fragment } = wp.element;
 
 
@@ -21,6 +31,9 @@ class smSection extends Component {
 		super( ...arguments );
 		this.onColorChange = this.onColorChange.bind(this);
 		this.onBgColorChange = this.onBgColorChange.bind(this);
+		this.toggleBoxShadow = this.toggleBoxShadow.bind( this );
+		this.toggleBorderRadius = this.toggleBorderRadius.bind( this );
+		this.toggleNoBottomPadding = this.toggleNoBottomPadding.bind( this );
 	}
 
 	onColorChange ( value ) {
@@ -33,6 +46,21 @@ class smSection extends Component {
 		this.props.setAttributes( { bgColor: value } );
 	}
 
+	toggleBoxShadow() {
+		const { attributes, setAttributes } = this.props;
+		setAttributes( { boxShadow: ! attributes.boxShadow } );
+	}
+
+	toggleBorderRadius() {
+		const { attributes, setAttributes } = this.props;
+		setAttributes( { borderRadius: ! attributes.borderRadius } );
+	}
+
+	toggleNoBottomPadding() {
+		const { attributes, setAttributes } = this.props;
+		setAttributes( { noBottomPadding: ! attributes.noBottomPadding } );
+	}
+
 	render() {
 		const {
 			className,
@@ -40,7 +68,10 @@ class smSection extends Component {
 			isSelected,
 			attributes: {
 				bgColor = '',
-				textColor = '#101f30'
+				textColor = '#101f30',
+				boxShadow,
+				borderRadius,
+				noBottomPadding
 			} = {}
 		} = this.props;
 
@@ -54,8 +85,18 @@ class smSection extends Component {
 			className,
 			isSelected && 'is-selected',
 			bgSlug && `bcolor-${bgSlug}`,
-			colorSlug && `color-${colorSlug}`
+			colorSlug && `color-${colorSlug}`,
+			boxShadow && 'has-box-shadow',
+			borderRadius && 'has-border-radius',
+			noBottomPadding && 'has-bottom-padding-0'
 		);
+
+		let output = 'Block';
+
+		if ('undefined' !== typeof this.props.insertBlocksAfter) {
+			output = <InnerBlocks />;
+		}
+
 
 		return [
 			!! isSelected && (<InspectorControls key='inspector'>
@@ -101,9 +142,32 @@ class smSection extends Component {
 						/>
 					</BaseControl>
 				</PanelBody>
+				<PanelBody title={'Details'} className={'editor-panel-detail-settings'}>
+					<BaseControl>
+						<ToggleControl
+							label={ __( 'Shadow' ) }
+							checked={ !! boxShadow }
+							onChange={ this.toggleBoxShadow }
+						/>
+					</BaseControl>
+					<BaseControl>
+						<ToggleControl
+							label={ __( 'Border radius' ) }
+							checked={ !! borderRadius }
+							onChange={ this.toggleBorderRadius }
+						/>
+					</BaseControl>
+					<BaseControl>
+						<ToggleControl
+							label={ __( 'Remove bottom padding' ) }
+							checked={ !! noBottomPadding }
+							onChange={ this.toggleNoBottomPadding }
+						/>
+					</BaseControl>
+				</PanelBody>
 			</InspectorControls> ),
 			<section className={ sectionClassName }>
-				<InnerBlocks />
+				{ output }
 			</section>
 		]
 	}
@@ -128,8 +192,25 @@ registerBlockType( 'sm/section', {
 		textColor: {
 			type: 'string',
 			default: '#101f30',
-		}
+		},
+		boxShadow: {
+			type: 'boolean',
+			default: false,
+		},
+		borderRadius: {
+			type: 'boolean',
+			default: false,
+		},
+		noBottomPadding: {
+			type: 'boolean',
+			default: false,
+		},
 	},
+	styles: [
+		{ name: 'default', label: __( 'Default margin' ), isDefault: true },
+		{ name: 'spacing-medium', label: __( 'Medium margin' ) },
+		{ name: 'spacing-large', label: __( 'Large margin' ) },
+	],
 
 	edit: smSection,
 
@@ -139,7 +220,10 @@ registerBlockType( 'sm/section', {
 			setAttributes,
 			attributes: {
 				bgColor = "",
-				textColor = "#101f30"
+				textColor = "#101f30",
+				boxShadow,
+				borderRadius,
+				noBottomPadding
 			} = {}
 		} = props;
 
@@ -152,7 +236,10 @@ registerBlockType( 'sm/section', {
 		const sectionClassName = classnames(
 			className,
 			bgSlug && `bcolor-${bgSlug}`,
-			colorSlug && `color-${colorSlug}`
+			colorSlug && `color-${colorSlug}`,
+			boxShadow && 'has-box-shadow',
+			borderRadius && 'has-border-radius',
+			noBottomPadding && 'has-bottom-padding-0'
 		);
 
 		return (

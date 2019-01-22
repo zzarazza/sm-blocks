@@ -62,6 +62,7 @@ function sm_blocks_editor_assets() {
 			'wp-components',
 			'wp-compose',
 			'wp-data',
+			'wp-dom-ready',
 			'wp-edit-post',
 			'wp-plugins',
 			'wp-api'

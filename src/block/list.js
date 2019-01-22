@@ -26,9 +26,15 @@ class smCustomList extends Component {
 			isSelected && 'is-selected'
 		);
 
+		let output = "List";
+
+		if ('undefined' !== typeof this.props.insertBlocksAfter) {
+			output = <InnerBlocks allowedBlocks={ ALLOWED_BLOCKS } />;
+		}
+
 		return (
 			<div className={ listClassName }>
-				<InnerBlocks allowedBlocks={ ALLOWED_BLOCKS } />
+				{ output }
 			</div>
 		);
 	}
@@ -41,6 +47,11 @@ registerBlockType( 'sm/custom-list', {
 	keywords: [
 		__( 'SM Custom List' ),
 		__( 'list' ),
+	],
+	styles: [
+		{ name: 'default', label: __( 'Default margin' ), isDefault: true },
+		{ name: 'spacing-medium', label: __( 'Medium margin' ) },
+		{ name: 'spacing-large', label: __( 'Large margin' ) },
 	],
 
 	edit: smCustomList,
