@@ -167,6 +167,7 @@ class smSelectedPage extends Component {
 						<i className={ iconClass }/>
 			 			<h3 className="page-block-title" dangerouslySetInnerHTML={{ __html: finalTitle }}></h3>
 			 			<div className="page-block-excerpt" dangerouslySetInnerHTML={{ __html: this.state.post.excerpt.rendered }}></div>
+			 			<div className="page-block-url"><a href={ this.state.post.link }>Read more</a></div>
 			 		</div>;
 		} else {
 			if( this.state.posts.length > 0 ) {
@@ -307,7 +308,8 @@ registerBlockType( 'sm/page-card', {
 				content,
 				shortTitle = '',
 				icon = 'add-user',
-				iconColor = "#f0f0f0"
+				iconColor = "#f0f0f0",
+				link
 			} = {}
 		} = props;
 
@@ -335,6 +337,7 @@ registerBlockType( 'sm/page-card', {
 					<i className={ iconClass }/>
 					<h3 className="page-block-title" dangerouslySetInnerHTML={ { __html: finalTitle } }></h3>
 					<div className="page-block-excerpt" dangerouslySetInnerHTML={ { __html: content } }></div>
+					<div className="page-block-url"><a href={ link }>Read more</a></div>
 				</div>
 			</div>
 	    );

@@ -202,16 +202,20 @@
 	.page-block-excerpt {
 		background-color: white;
 		margin: 0;
-		padding: 16px 24px 24px;
+		padding: 16px 24px 12px;
 
 		p {
 			margin: 0;
 		}
+	}
+
+	.page-block-url {
+		background-color: white;
+		padding: 12px 24px 24px;
 
 		.read-more-link {
 			display: table;
 			font-size: 14px;
-			margin-top: 12px;
 		}
 	}
 }
