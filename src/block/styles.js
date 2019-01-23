@@ -45,4 +45,20 @@ wp.domReady( function() {
 		label: __( 'Large margin', 'sm' )
 	});
 
+	wp.blocks.registerBlockStyle('core/image', {
+		name: 'default',
+		label: __( 'Default margin', 'sm' ),
+		isDefault: true
+	});
+
+	wp.blocks.registerBlockStyle('core/image', {
+		name: 'spacing-medium',
+		label: __( 'Medium margin', 'sm' )
+	});
+
+	wp.blocks.registerBlockStyle('core/image', {
+		name: 'spacing-large',
+		label: __( 'Large margin', 'sm' )
+	});
+
 });
