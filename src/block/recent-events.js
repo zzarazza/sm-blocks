@@ -52,7 +52,7 @@ registerBlockType( 'sm/recent-events', {
             !! isSelected && ( <InspectorControls key='inspector'>
 			<PanelBody>
 				<BaseControl
-			        id="sm_recent_items_block_title"
+			        id="sm_recent_items_block_number"
 			        label="Number of events"
 			    >
 					<RangeControl

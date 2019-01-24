@@ -23,6 +23,7 @@ import './block/page.js';
 import './block/recent-posts.js';
 import './block/recent-news.js';
 import './block/recent-events.js';
+import './block/event-speakers.js';
 
 import './block/team.js';
 
