@@ -553,3 +553,58 @@ register_block_type( 'sm/event-speakers',
     	'render_callback' => 'sm_render_block_event_speakers',
 	)
 );
+
+
+function sm_render_block_event_location( $attributes ) {
+
+    $output = '';
+
+	$location = rwmb_meta( 'event_location', '', $attributes['eventID'] );
+
+	if ( count( $location ) === 0 ) {
+        return 'No location set';
+    }
+
+	$output .= '<div class="event-location"><span>' . $location . '</span></div>';
+
+	return $output;
+}
+
+register_block_type( 'sm/event-location',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			),
+			'eventID'     => array(
+				'type'    => 'number',
+				'default' => 0
+			)
+		),
+    	'render_callback' => 'sm_render_block_event_location',
+	)
+);
+
+function sm_render_block_event_dates( $attributes ) {
+
+    $output = the_systemorph_event_dates( $attributes['eventID'] );
+
+	$output = '<div class="event-dates"><span>' . $output . '</span></div>';
+
+	return $output;
+}
+
+register_block_type( 'sm/event-dates',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			),
+			'eventID'     => array(
+				'type'    => 'number',
+				'default' => 0
+			)
+		),
+    	'render_callback' => 'sm_render_block_event_dates',
+	)
+);
