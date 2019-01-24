@@ -397,6 +397,47 @@
 	}
 }
 
+.event-speakers {
+	padding: 20px;
+	box-shadow: 3px 3px 10px rgba(black,0.1);
+
+	.event-speakers-title {
+		margin-top: 0;
+	}
+
+	.speaker-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.event-speaker {
+		display: flex;
+
+		+ .event-speaker {
+			margin-top: 20px;
+		}
+
+		.event-speaker-image {
+			width: 70px;
+			margin-right: 20px;
+
+			img {
+				display: block;
+				height: auto;
+			}
+		}
+
+		.event-speaker-info {
+			flex-grow: 1;
+
+			> * {
+				margin: 0;
+			}
+		}
+	}
+}
+
 .is-style-spacing-medium,
 .is-style-spacing-large {
 	position: relative;

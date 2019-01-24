@@ -387,6 +387,8 @@ function sm_render_block_recent_events( $attributes, $content ) {
 		$l
 	);
 
+	wp_reset_postdata();
+
 	return $block_content;
 }
 
@@ -476,6 +478,8 @@ function sm_render_block_team( $attributes, $content ) {
 		$list_items_markup
 	);
 
+	wp_reset_postdata();
+
 	return $block_content;
 }
 
@@ -490,12 +494,15 @@ register_block_type( 'sm/team',
 	)
 );
 
-function sm_render_block_event_speakers( $attributes, $content ) {
-	global $post;
+function sm_render_block_event_speakers( $attributes ) {
 
     $output = '';
 
-	$speakers = rwmb_meta( 'event_speakers', '', $post->ID );
+	$speakers = rwmb_meta( 'event_speakers', '', $attributes['eventID'] );
+
+	if ( count( $speakers ) === 0 ) {
+        return 'No speakers yet';
+    }
 
 	if ( $speakers ) :
 		$output .= '<article class="event-speakers">';
@@ -521,18 +528,6 @@ function sm_render_block_event_speakers( $attributes, $content ) {
 
 	endif;
 
-	// $class = 'wp-block-team-management';
-
-	// if ( isset( $attributes['className'] ) ) {
-	// 	$class .= ' ' . $attributes['className'];
-	// }
-
-	// $block_content = sprintf(
-	// 	'<div class="%1$s"> %2$s </div>',
-	// 	esc_attr( $class ),
-	// 	$list_items_markup
-	// );
-
 	return $output;
 }
 
@@ -542,8 +537,13 @@ register_block_type( 'sm/event-speakers',
 			'className'   => array(
 				'type'    => 'string',
 			),
+			'eventID'     => array(
+				'type'    => 'number',
+				'default' => 0
+			),
 			'title'   => array(
 				'type'    => 'string',
+				'default' => 'Featuring'
 			),
 			'postsToShow' => array(
 				'type'    => 'number',
