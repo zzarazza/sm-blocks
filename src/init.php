@@ -353,13 +353,12 @@ function sm_render_block_recent_events( $attributes, $content ) {
 			'<article class="wp-block-recent-events-item">
 				<header class="entry-header">
 					<h3 class="entry-title"><a href="%1$s">%2$s</a></h3>
-					<div class="entry-meta"><span class="posted-on"><span class="screen-reader-text">Event date</span> %3$s</span>, <span class="location">%4$s</span></div>
+					%3$s
 				</header>
-				<div class="blog-content"><div class="entry-content"><p>%5$s</p></div></div></article>',
+				<div class="blog-content"><div class="entry-content"><p>%4$s</p></div></div></article>',
 			esc_url( get_permalink( $post_id ) ),
-			esc_html( $title ),
-			the_systemorph_event_dates( $post_id ),
-			the_systemorph_event_location( $post_id ),
+			$title,
+			the_systemorph_event_meta($post_id, true),
 			$text
 		);
 
