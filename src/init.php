@@ -358,7 +358,7 @@ function sm_render_block_recent_events( $attributes, $content ) {
 				<div class="blog-content"><div class="entry-content"><p>%4$s</p></div></div></article>',
 			esc_url( get_permalink( $post_id ) ),
 			$title,
-			the_systemorph_event_meta($post_id, true),
+			the_systemorph_event_meta($post_id),
 			$text
 		);
 
