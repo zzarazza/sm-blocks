@@ -33,7 +33,9 @@ class smSection extends Component {
 		this.onBgColorChange = this.onBgColorChange.bind(this);
 		this.toggleBoxShadow = this.toggleBoxShadow.bind( this );
 		this.toggleBorderRadius = this.toggleBorderRadius.bind( this );
+		this.toggleNoTopPadding = this.toggleNoTopPadding.bind( this );
 		this.toggleNoBottomPadding = this.toggleNoBottomPadding.bind( this );
+		this.toggleStriped = this.toggleStriped.bind( this );
 	}
 
 	onColorChange ( value ) {
@@ -56,9 +58,19 @@ class smSection extends Component {
 		setAttributes( { borderRadius: ! attributes.borderRadius } );
 	}
 
+	toggleNoTopPadding() {
+		const { attributes, setAttributes } = this.props;
+		setAttributes( { noTopPadding: ! attributes.noTopPadding } );
+	}
+
 	toggleNoBottomPadding() {
 		const { attributes, setAttributes } = this.props;
 		setAttributes( { noBottomPadding: ! attributes.noBottomPadding } );
+	}
+
+	toggleStriped () {
+		const { attributes, setAttributes } = this.props;
+		setAttributes( { striped: ! attributes.striped } );
 	}
 
 	render() {
@@ -71,7 +83,9 @@ class smSection extends Component {
 				textColor = '#101f30',
 				boxShadow,
 				borderRadius,
-				noBottomPadding
+				noTopPadding,
+				noBottomPadding,
+				striped
 			} = {}
 		} = this.props;
 
@@ -88,7 +102,9 @@ class smSection extends Component {
 			colorSlug && `color-${colorSlug}`,
 			boxShadow && 'has-box-shadow',
 			borderRadius && 'has-border-radius',
-			noBottomPadding && 'has-bottom-padding-0'
+			noTopPadding && 'has-top-padding-0',
+			noBottomPadding && 'has-bottom-padding-0',
+			striped && 'section-striped'
 		);
 
 		let output = 'Block';
@@ -159,9 +175,23 @@ class smSection extends Component {
 					</BaseControl>
 					<BaseControl>
 						<ToggleControl
+							label={ __( 'Remove top padding' ) }
+							checked={ !! noTopPadding }
+							onChange={ this.toggleNoTopPadding }
+						/>
+					</BaseControl>
+					<BaseControl>
+						<ToggleControl
 							label={ __( 'Remove bottom padding' ) }
 							checked={ !! noBottomPadding }
 							onChange={ this.toggleNoBottomPadding }
+						/>
+					</BaseControl>
+					<BaseControl>
+						<ToggleControl
+							label={ __( 'Stripes' ) }
+							checked={ !! striped }
+							onChange={ this.toggleStriped }
 						/>
 					</BaseControl>
 				</PanelBody>
@@ -201,15 +231,27 @@ registerBlockType( 'sm/section', {
 			type: 'boolean',
 			default: false,
 		},
+		noTopPadding: {
+			type: 'boolean',
+			default: false,
+		},
 		noBottomPadding: {
+			type: 'boolean',
+			default: false,
+		},
+		striped: {
 			type: 'boolean',
 			default: false,
 		},
 	},
 	styles: [
-		{ name: 'default', label: __( 'Default margin' ), isDefault: true },
-		{ name: 'spacing-medium', label: __( 'Medium margin' ) },
-		{ name: 'spacing-large', label: __( 'Large margin' ) },
+		{ name: 'default', label: __( 'Default' ), isDefault: true },
+		{ name: 'spacing-small', label: __( 'Small' ) },
+		{ name: 'spacing-medium', label: __( 'Medium' ) },
+		{ name: 'spacing-large', label: __( 'Large' ) },
+		{ name: 'spacing-xlarge', label: __( 'XLarge' ) },
+		{ name: 'spacing-xxlarge', label: __( '2XLarge' ) },
+		{ name: 'spacing-none', label: __( 'None' ) },
 	],
 
 	edit: smSection,
@@ -223,7 +265,9 @@ registerBlockType( 'sm/section', {
 				textColor = "#101f30",
 				boxShadow,
 				borderRadius,
-				noBottomPadding
+				noTopPadding,
+				noBottomPadding,
+				striped
 			} = {}
 		} = props;
 
@@ -239,7 +283,9 @@ registerBlockType( 'sm/section', {
 			colorSlug && `color-${colorSlug}`,
 			boxShadow && 'has-box-shadow',
 			borderRadius && 'has-border-radius',
-			noBottomPadding && 'has-bottom-padding-0'
+			noTopPadding && 'has-top-padding-0',
+			noBottomPadding && 'has-bottom-padding-0',
+			striped && 'section-striped'
 		);
 
 		return (
