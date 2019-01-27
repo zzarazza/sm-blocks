@@ -47,11 +47,16 @@ registerBlockType( 'sm/custom-list', {
 	keywords: [
 		__( 'SM Custom List' ),
 		__( 'list' ),
+		__( 'custom list' ),
 	],
 	styles: [
-		{ name: 'default', label: __( 'Default margin' ), isDefault: true },
-		{ name: 'spacing-medium', label: __( 'Medium margin' ) },
-		{ name: 'spacing-large', label: __( 'Large margin' ) },
+		{ name: 'default', label: __( 'Default' ), isDefault: true },
+		{ name: 'spacing-small', label: __( 'Small' ) },
+		{ name: 'spacing-medium', label: __( 'Medium' ) },
+		{ name: 'spacing-large', label: __( 'Large' ) },
+		{ name: 'spacing-xlarge', label: __( 'XLarge' ) },
+		{ name: 'spacing-xxlarge', label: __( '2XLarge' ) },
+		{ name: 'spacing-none', label: __( 'None' ) },
 	],
 
 	edit: smCustomList,
