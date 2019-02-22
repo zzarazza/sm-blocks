@@ -131,4 +131,13 @@ wp.domReady( function() {
 	wp.blocks.registerBlockStyle('core/image', $xxlarge);
 	wp.blocks.registerBlockStyle('core/image', $none);
 
+	// Vimeo
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $default);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $small);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $medium);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $large);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $xlarge);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $xxlarge);
+	wp.blocks.registerBlockStyle('core-embed/vimeo', $none);
+
 });
