@@ -325,7 +325,14 @@ function sm_render_block_recent_events( $attributes, $content ) {
     $recent_posts = wp_get_recent_posts( array(
         'numberposts' => $attributes['postsToShow'],
         'post_status' => 'publish',
-        'post_type'   => 'event'
+        'post_type'   => 'event',
+        'tax_query' => array(
+			array(
+				'taxonomy' => 'event-timeline',
+				'field' => 'slug',
+				'terms' => 'upcoming'
+			)
+		)
     ) );
     if ( count( $recent_posts ) === 0 ) {
         return 'No events';
