@@ -425,7 +425,14 @@ function sm_render_block_team( $attributes, $content ) {
         'post_status' => 'publish',
         'post_type'   => 'management-team',
         'orderby'     => 'menu_order',
-        'order'       => 'ASC'
+        'order'       => 'ASC',
+        'tax_query' => array(
+			array(
+				'taxonomy' => 'level',
+				'field' => 'slug',
+				'terms' => 'management-team'
+			)
+		)
     ) );
 
     if ( count( $team ) === 0 ) {
