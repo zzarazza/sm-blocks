@@ -507,6 +507,79 @@ register_block_type( 'sm/team',
 	)
 );
 
+// Team Widget
+function sm_render_block_team_member( $attributes, $content ) {
+    $team = wp_get_recent_posts( array(
+        'numberposts' => 1,
+        'post_status' => 'publish',
+        'post_type'   => 'management-team'
+    ) );
+
+    if ( count( $team ) === 0 ) {
+        return 'No management team';
+    }
+
+	$list_items_markup = '';
+
+
+	$team_id = $t['ID'];
+
+	$title = get_the_title( $team_id );
+	if ( $title !== '') {
+		$title = '<h3 class="t-m-name">' . $title . '</h3>';
+	}
+
+	$thumbnail = get_the_post_thumbnail( $team_id, 'systemorph-team-member' );
+
+	if ( $thumbnail && $thumbnail !== '') {
+		$thumbnail = '<div class="t-m-image">' . $thumbnail . '</div>';
+	}
+
+	$content = $t['post_excerpt'];
+
+	$list_items_markup .= sprintf(
+		'<article id="team_member_%1$s" class="%2$s">
+			<header class="t-m-header">%3$s
+				<div>%4$s %5$s</div>
+			</header>
+			<div class="t-m-info">%6$s</div></article>',
+		$team_id,
+		implode( ' ', get_post_class(array("team-member", "wp-block-recent-posts-item"), $team_id)),
+		$thumbnail,
+		$title,
+		$content
+	);
+
+	$list_items_markup .= "\n";
+
+	$class = 'wp-block-team-member';
+
+	if ( isset( $attributes['className'] ) ) {
+		$class .= ' ' . $attributes['className'];
+	}
+
+	$block_content = sprintf(
+		'<div class="%1$s"> %2$s </div>',
+		esc_attr( $class ),
+		$list_items_markup
+	);
+
+	wp_reset_postdata();
+
+	return $block_content;
+}
+
+register_block_type( 'sm/team-member',
+	array(
+		'attributes'      => array(
+			'className'   => array(
+				'type'    => 'string',
+			)
+		),
+    	'render_callback' => 'sm_render_block_team_member',
+	)
+);
+
 function sm_render_block_event_speakers( $attributes ) {
 
     $output = '';
