@@ -36,13 +36,13 @@ registerBlockType( 'sm/team-member', {
     icon: 'id-alt',
     category: 'widgets',
     attributes: {
-    posts: {
-		type: 'array',
-			default: []
-		},
+	    posts: {
+			type: 'array',
+				default: []
+			},
 	},
 
-    edit ({ attributes, setAttributes }) {
+    edit ({ className, isSelected, attributes, setAttributes }) {
 		return (
 			<Fragment>
 				<InspectorControls>
@@ -65,7 +65,7 @@ registerBlockType( 'sm/team-member', {
 						/>
 					</PanelBody>
 				</InspectorControls>
-				<div>
+				<div className={ className }>
 					{ attributes.posts.map(post => (
 						<div className="author">
 							<div className="author-thumb">{ post.thumb && <img src={ post.thumb } /> }</div>
@@ -80,9 +80,9 @@ registerBlockType( 'sm/team-member', {
 		);
 	},
 
-    save ( { attributes } ) {
+    save ( { className, isSelected, attributes } ) {
     	return (
-    		<div>
+    		<div className={ className }>
 				{ attributes.posts.map(post => (
 					<div className="author">
 						<div className="author-thumb">{ post.thumb && <img src={ post.thumb } /> }</div>
