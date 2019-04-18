@@ -27,5 +27,6 @@ import './block/event-speakers.js';
 import './block/event-details.js';
 
 import './block/team.js';
+import './block/team-member.js';
 
 import './block/styles.js';
