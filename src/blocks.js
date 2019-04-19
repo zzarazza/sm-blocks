@@ -29,6 +29,6 @@ import './block/event-details.js';
 import './block/team.js';
 import './block/team-member.js';
 
-import './block/article.js';
+// import './block/article.js';
 
 import './block/styles.js';
