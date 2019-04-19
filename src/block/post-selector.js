@@ -211,7 +211,8 @@ class PostSelector extends Component {
         date: response.date,
         type: response.type,
         status: response.status,
-        thumb: response.featured_image_url
+        thumb: response.featured_image_url,
+        author: response.author_name
       };
       // send data to the block;
       this.props.onPostSelect(fullpost);

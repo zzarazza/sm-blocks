@@ -72,17 +72,6 @@ registerBlockType( 'sm/article', {
 
 		let output = "";
 
-		const ArticleTag = attributes.comingSoon ? <div> : <a href={post.url}>;
-
-
-		output = attributes.posts.map(post => (
-					<ArticleTag>
-						<p>by {post.author}</p>
-						<h3>{ post.title }</h3>
-						<p className="read-more">{ attributes.comingSoon ? 'Coming soon' : 'Read more'  }</p>
-					</ArticleTag>
-				));
-
 		return (
 			<Fragment>
 				<InspectorControls>
@@ -143,7 +132,13 @@ registerBlockType( 'sm/article', {
 					</PanelBody>
 				</InspectorControls>
 				<article className={ articleClassName }>
-					{ output }
+					{ attributes.posts.map(post => (
+						<div>
+							<p className="by-author">by {post.author}</p>
+							<h3>{ post.title }</h3>
+							<p className="read-more">{ attributes.comingSoon ? 'Coming soon' : 'Read more' }</p>
+						</div>
+					))}
 				</article>
 			</Fragment>
 		);
@@ -159,21 +154,22 @@ registerBlockType( 'sm/article', {
 			attributes.comingSoon && `is-coming-soon`
 		);
 
-		let output = "";
-
-		// output = attributes.posts.map(post => (
-		// 			<div>
-		// 			{ attributes.comingSoon ? '<div>' : '<a href={post.url}>' }
-		// 				<p>by {post.author}</p>
-		// 				<h3>{ post.title }</h3>
-		// 				<p className="read-more">{ attributes.comingSoon ? 'Read more' : 'Coming soon' }</p>
-		// 			{ attributes.comingSoon ? '</div>' : '</a>' }
-		// 			</div>
-		// 		));
-
     	return (
     		<article className={ articleClassName }>
-				{ output }
+				{ attributes.posts.map(post => (
+					attributes.comingSoon ?
+						<div>
+							<p className="by-author">by {post.author}</p>
+							<h3>{ post.title }</h3>
+							<p className="read-more">Coming soon</p>
+						</div>
+					:
+						 <a href={post.url}>
+							<p className="by-author">by {post.author}</p>
+							<h3>{ post.title }</h3>
+							<p className="read-more">Read more</p>
+						</a>
+				))}
 			</article>
 		)
 	}

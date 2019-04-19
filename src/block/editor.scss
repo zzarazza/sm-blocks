@@ -520,7 +520,8 @@
 
 .wp-block-sm-team-member {
 	min-height: 100px;
-	box-shadow: 0 0 0 1px rgba(black,0.35);
+	padding: 16px;
+	box-shadow: 0 0 0 1px rgba(black,0.25);
 
 	.author {
 		display: flex;
@@ -558,5 +559,19 @@
 				margin: 0;
 			}
 		}
+	}
+}
+
+.wp-block-sm-article {
+	padding: 16px;
+	box-shadow: 0 0 0 1px rgba(black,0.25);
+
+	p,
+	h3 {
+		margin: 0;
+	}
+
+	.by-author {
+		font-size: 13px;
 	}
 }

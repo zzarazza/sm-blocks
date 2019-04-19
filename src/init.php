@@ -694,3 +694,44 @@ register_block_type( 'sm/event-dates',
     	'render_callback' => 'sm_render_block_event_dates',
 	)
 );
+
+function post_featured_image_json( $data, $post, $context ) {
+	$featured_image_id = $data->data['featured_media'];
+	$featured_image_url = wp_get_attachment_image_src( $featured_image_id, 'systemorph-thumbnail-avatar' );
+
+	if ( $featured_image_url ) {
+		$data->data['featured_image_url'] = $featured_image_url[0];
+	}
+
+	return $data;
+}
+
+add_filter( 'rest_prepare_management-team', 'post_featured_image_json', 10, 3 );
+
+function wpse_20160421_get_author_meta ($object, $field_name, $request) {
+
+    $user_data = get_userdata($object['author']); // get user data from author ID.
+
+    $array_data = (array)($user_data->data); // object to array conversion.
+
+    // prevent user enumeration.
+    unset($array_data['user_login']);
+    unset($array_data['user_nicename']);
+    unset($array_data['user_email']);
+    unset($array_data['user_registered']);
+    unset($array_data['user_pass']);
+    unset($array_data['user_activation_key']);
+
+    return $array_data['display_name'];
+}
+
+function wpse_20160421_register_author_meta_rest_field() {
+
+    register_rest_field('page', 'author_name', array(
+        'get_callback'    => 'wpse_20160421_get_author_meta',
+        'update_callback' => null,
+        'schema'          => null,
+    ));
+
+}
+add_action('rest_api_init', 'wpse_20160421_register_author_meta_rest_field');
