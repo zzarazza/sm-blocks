@@ -131,6 +131,23 @@ wp.domReady( function() {
 	wp.blocks.registerBlockStyle('core/image', $xxlarge);
 	wp.blocks.registerBlockStyle('core/image', $none);
 
+	var el = wp.element.createElement;
+	var allowColumnStyle = wp.compose.createHigherOrderComponent( function( BlockEdit ) {
+		return function( props ) {
+			var content = el( BlockEdit, props );
+
+			if ( props.name === 'core/columns' && typeof props.insertBlocksAfter === 'undefined' ) {
+				content = el( 'div', {} );
+			}
+
+			return el(
+				wp.element.Fragment, {}, content
+			);
+		};
+	}, 'allowColumnStyle' );
+
+	wp.hooks.addFilter( 'editor.BlockEdit', 'my/gutenberg', allowColumnStyle );
+
 	// Columns
 	wp.blocks.registerBlockStyle('core/columns', $default);
 	wp.blocks.registerBlockStyle('core/columns', $small);
