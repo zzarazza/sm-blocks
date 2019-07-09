@@ -20,6 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
+
+function is_admin_editor_block () {
+	return \defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $_REQUEST['context'] ) && 'edit' === $_REQUEST['context'];
+}
+
 function sm_blocks_assets() {
 	// Styles.
 	wp_enqueue_style(
@@ -125,7 +130,10 @@ function sm_render_block_recent_posts( $attributes, $content ) {
         'post_type'   => 'post'
     ) );
     if ( count( $recent_posts ) === 0 ) {
-        return 'No posts';
+    	if ( is_admin_editor_block() ) {
+        	return 'No recent posts';
+        }
+        return false;
     }
 
     $t = '';
@@ -227,7 +235,10 @@ function sm_render_block_recent_news( $attributes, $content ) {
         'post_type'   => 'news'
     ) );
     if ( count( $recent_posts ) === 0 ) {
-        return 'No news';
+    	if ( is_admin_editor_block() ) {
+        	return 'No recent news';
+        }
+        return false;
     }
 
     $t = '';
@@ -334,8 +345,13 @@ function sm_render_block_recent_events( $attributes, $content ) {
 			)
 		)
     ) );
+
     if ( count( $recent_posts ) === 0 ) {
-        return 'No events';
+		if ( is_admin_editor_block() ) {
+			return 'No events found';
+		}
+
+       	return false;
     }
 
 	$list_items_markup = '';
@@ -436,7 +452,10 @@ function sm_render_block_team( $attributes, $content ) {
     ) );
 
     if ( count( $team ) === 0 ) {
-        return 'No management team';
+    	if ( is_admin_editor_block() ) {
+        	return 'No management team';
+        }
+        return false;
     }
 
 	$list_items_markup = '';
@@ -587,7 +606,10 @@ function sm_render_block_event_speakers( $attributes ) {
 	$speakers = rwmb_meta( 'event_speakers', '', $attributes['eventID'] );
 
 	if ( count( $speakers ) === 0 ) {
-        return 'No speakers yet';
+		if ( is_admin_editor_block() ) {
+        	return 'No speakers yet';
+        }
+        return false;
     }
 
 	if ( $speakers ) :
@@ -648,7 +670,10 @@ function sm_render_block_event_location( $attributes ) {
 	$location = rwmb_meta( 'event_location', '', $attributes['eventID'] );
 
 	if ( count( $location ) === 0 ) {
-        return 'No location set';
+		if ( is_admin_editor_block() ) {
+        	return 'No location set';
+        }
+        return false;
     }
 
 	$output .= '<div class="event-location"><span>' . $location . '</span></div>';
