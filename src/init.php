@@ -279,7 +279,7 @@ function sm_render_block_recent_news( $attributes, $content ) {
 				</header>
 				<div class="blog-content"><div class="entry-content"><p>%6$s</p></div></div></article>',
 			esc_url( get_permalink( $post_id ) ),
-			esc_html( $title ),
+			wp_kses( $title, array( 'br' => array(), 'em' => array(), 'strong' => array()) ),
 			get_the_date( DATE_W3C, $post_id ),
 			get_the_date("d M Y", $post_id),
 			$author,
